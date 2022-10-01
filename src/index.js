@@ -1,7 +1,7 @@
-import './css/styles.css';
+import './css/style.css';
 //import axios from "axios";
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import ImagesApiService from './fetchImages';
+import ImagesApiService from './fetch-gallery';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
