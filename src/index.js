@@ -123,3 +123,4 @@ function renderImage(data) {
 function clearGallaryCard() {
   galleryCard.innerHTML = '';
 }
+
