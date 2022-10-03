@@ -6,12 +6,14 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 const searchForm = document.querySelector('#search-form');
 const galleryCard = document.querySelector('.gallery');
 const loadMoreBtn = document.querySelector('.load-more');
-
+let galleryEl = new SimpleLightbox('.gallery a', {});
 searchForm.addEventListener('submit', onSubmitForm);
 loadMoreBtn.addEventListener('click', onLoadMore);
 
+var totalPages = 0;
 let searchValue = '';
-let pageNumber = 1;
+var pageNumber = 1;
+
 loadMoreBtn.hidden = true;
 
 function onSubmitForm(e) {
@@ -33,6 +35,9 @@ function onSubmitForm(e) {
 }
 
 function onLoadMore() {
+  if (pageNumber < totalPages){
+    pageNumber += 1;
+  }
   fetchInfo()
     .then(renderImage)
     .catch(data => {
@@ -60,16 +65,26 @@ async function fetchInfo() {
     })
 
     .then(res => {
-      pageNumber += 1;
+      if (res.data.totalHits > 0){
+        totalPages = Math.ceil(res.data.totalHits/ 40);
+      }
 
       if (res.data.totalHits === 0) {
+        totalPages = 0;
         loadMoreBtn.hidden = true;
         Notiflix.Notify.warning(
           'Sorry, there are no images matching your search query. Please try again.'
         );
       }
+      
+      if (pageNumber ===totalPages){
+        loadMoreBtn.hidden = true;
+        Notiflix.Notify.info(
+          `We're sorry, but you've reached the end of search results.`
+        );
+      }
 
-      if (pageNumber === 2 && res.data.totalHits > 0) {
+      if (pageNumber <= totalPages && res.data.totalHits > 0) {
         Notiflix.Notify.success(
           `Hooray! We found ${res.data.totalHits} images.`
         );
@@ -116,10 +131,10 @@ function renderImage(data) {
 
   galleryCard.insertAdjacentHTML('beforeend', card);
 
-  let galleryEl = new SimpleLightbox('.gallery a', {});
-  galleryEl.on(('show.simplelightbox', function () {}));
+  galleryEl.refresh()
+  // galleryEl.on(('show.simplelightbox', function () {}));
 }
-
+ 
 function clearGallaryCard() {
   galleryCard.innerHTML = '';
 }
