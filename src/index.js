@@ -7,6 +7,7 @@ const searchForm = document.querySelector('#search-form');
 const galleryCard = document.querySelector('.gallery');
 const loadMoreBtn = document.querySelector('.load-more');
 let galleryEl = new SimpleLightbox('.gallery a', {});
+
 searchForm.addEventListener('submit', onSubmitForm);
 loadMoreBtn.addEventListener('click', onLoadMore);
 
